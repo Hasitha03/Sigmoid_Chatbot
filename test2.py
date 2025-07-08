@@ -38,7 +38,9 @@ if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'user_id' not in st.session_state:
     st.session_state.user_id = ""
-
+    
+VALID_USER_ID = "User_test1"
+VALID_PASSWORD = "Sigmoid@123"
 
 def login_page():
     """Display the login page"""
@@ -55,7 +57,7 @@ def login_page():
         login_button = st.form_submit_button("Login", type="primary")
 
         if login_button:
-            if user_id.strip():  # Simple validation - just check if user_id is not empty
+            if user_id.strip() == VALID_USER_ID and password == VALID_PASSWORD:
                 st.session_state.logged_in = True
                 st.session_state.user_id = user_id.strip()
                 st.rerun()  # Refresh the page to show main content
