@@ -1062,7 +1062,7 @@ def render_welcome_message():
         cols = st.columns(2)
 
         with cols[0]:
-            with st.popover("📊 Data Analysis\nShipment insights and trends", help="Click to learn more",use_container_width=True):
+            with st.popover("📊 Insight Generation Agent", help="Click to learn more",use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
                 The <strong>Insight Generation Agent</strong> aggregates and analyzes logistics and operational data, 
@@ -1074,7 +1074,7 @@ def render_welcome_message():
                 """, unsafe_allow_html=True)
 
         with cols[1]:
-            with st.popover("💰 Cost Optimization\nTransport cost analysis", help="Click to learn more",use_container_width=True):
+            with st.popover("💰 Order Frequency Optimization Agent", help="Click to learn more",use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
                     The <strong>Order Frequency Optimization Agent</strong> is designed to enhance
@@ -1086,7 +1086,7 @@ def render_welcome_message():
 
         cols = st.columns(2)
         with cols[0]:
-            with st.popover("📈 Performance Metrics\nKPI tracking and analysis", help="Click to learn more" ,use_container_width=True):
+            with st.popover("📈 Pallet Utilization Optimization Agent", help="Click to learn more" ,use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
                     The <strong>Pallet Utilization Optimization Agent</strong> is a cost-efficiency tool designed to
@@ -1097,7 +1097,7 @@ def render_welcome_message():
                 """, unsafe_allow_html=True)
 
         with cols[1]:
-            with st.popover("🎯 Strategic Insights\nBusiness intelligence", help="Click to learn more",use_container_width=True):
+            with st.popover("🎯 Drop Point Centralization Agent", help="Click to learn more",use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
                     The <strong>Drop Point Centralization Agent</strong> is a strategic 
