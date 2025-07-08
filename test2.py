@@ -49,7 +49,8 @@ def login_page():
     with st.form("login_form"):
         st.subheader("Please enter your credentials")
         user_id = st.text_input("User ID", placeholder="Enter your user ID")
-
+        password = st.text_input("Password", type="password", placeholder="Enter your password")
+        
         # Login button
         login_button = st.form_submit_button("Login", type="primary")
 
@@ -59,7 +60,7 @@ def login_page():
                 st.session_state.user_id = user_id.strip()
                 st.rerun()  # Refresh the page to show main content
             else:
-                st.error("Please enter a valid User ID")
+                st.error("Please enter a valid User ID and password")
 
 # Enhanced Custom CSS with beautiful styling
 st.markdown("""
@@ -1064,24 +1065,22 @@ def render_welcome_message():
             with st.popover("📊 Data Analysis\nShipment insights and trends", help="Click to learn more",use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
-                    The **Insights Agent** is designed to streamline logistics and operational decision-making by:
-                    **Data Aggregation & Analysis**
-                        Collects and analyzes logistics and operational data to identify trends, seasonality, and performance fluctuations.
-
-                    **Dynamic KPI Benchmarking**
-                    Benchmarks key performance indicators across time periods, customers, locations, and product segments to support strategic decisions.
-
-                    **Real-Time Insights via Natural Language**
-                    Answers business questions using natural language input, reducing reliance on static reports by delivering dynamic, real-time insights.
-                </div>
+                The <strong>Insight Generation Agent</strong> aggregates and analyzes logistics and operational data, 
+                    identifies trends, seasonality, and performance fluctuations, benchmarks KPIs across
+                     time periods, customers, locations, or product segments, answers common business questions
+                      through natural language input and reduces the need for static reports by offering dynamic, 
+                      real-time responses
+                    </div>
                 """, unsafe_allow_html=True)
 
         with cols[1]:
             with st.popover("💰 Cost Optimization\nTransport cost analysis", help="Click to learn more",use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
-                    Analyze logistics spend across modes, regions, and partners. 
-                    Identify high-cost lanes, inefficient loads, and cost-saving opportunities.
+                    The <strong>Order Frequency Optimization Agent</strong> is designed to enhance
+                     shipment planning by intelligently consolidating customer orders. By optimizing how
+                      frequently and when deliveries occur, this agent helps logistics teams reduce transportation costs,
+                     improve truck utilization, and streamline operational efficiency.
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -1090,8 +1089,10 @@ def render_welcome_message():
             with st.popover("📈 Performance Metrics\nKPI tracking and analysis", help="Click to learn more" ,use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
-                    Track key logistics KPIs like on-time delivery, cost per pallet, CO₂ emissions, 
-                    and shipment utilization. Helps in operational monitoring and benchmarking.
+                    The <strong>Pallet Utilization Optimization Agent</strong> is a cost-efficiency tool designed to
+                     enhance outbound shipment effectiveness by maximizing pallet space utilization. 
+                     It focuses on optimizing pallet configurations such as
+                     increasing shipper boxes per layer and adjusting pallet height to fit more units per pallet.
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -1099,8 +1100,11 @@ def render_welcome_message():
             with st.popover("🎯 Strategic Insights\nBusiness intelligence", help="Click to learn more",use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
-                    Get high-level intelligence around service quality, supply chain risk, 
-                    and optimization potential for long-term planning and decision-making.
+                    The <strong>Drop Point Centralization Agent</strong> is a strategic 
+                    optimization tool that enhances distribution efficiency by consolidating 
+                    delivery locations. It is specifically designed to reduce the number of unique delivery 
+                    drop points (postal codes) for each customer,
+                     thereby minimizing total shipment distance and improving per-pallet cost efficiency.
                 </div>
                 """, unsafe_allow_html=True)
 
