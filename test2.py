@@ -33,26 +33,51 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'user_id' not in st.session_state:
     st.session_state.user_id = ""
-    
+
 VALID_USER_ID = "User_test1"
 VALID_PASSWORD = "Sigmoid@123"
 
+st.markdown(
+    """
+    <style>
+
+    label {
+        color: white !important;
+    }
+
+    /* Optional: Style form container */
+    div[data-testid="stForm"] {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        margin-left:30px;
+        color: white;
+        padding : 2rem;
+        border-radius: 30px 30px 30px 30px;
+        max-width: 95%;
+        word-wrap: break-word;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        position: relative;
+        font-weight: 500;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 def login_page():
     """Display the login page"""
-    st.title("🔐 Login")
+    st.title("Logistics Analytics Assistant")
     st.markdown("---")
-
     # Create login form
+    st.markdown('<div class="login-container">', unsafe_allow_html=True)
     with st.form("login_form"):
         st.subheader("Please enter your credentials")
         user_id = st.text_input("User ID", placeholder="Enter your user ID")
         password = st.text_input("Password", type="password", placeholder="Enter your password")
-        
+
         # Login button
         login_button = st.form_submit_button("Login", type="primary")
 
@@ -63,7 +88,18 @@ def login_page():
                 st.rerun()  # Refresh the page to show main content
             else:
                 st.error("Please enter a valid User ID and password")
+    st.markdown('</div>', unsafe_allow_html=True)
 
+st.markdown(
+    """
+    <style>
+        section[data-testid="stSidebar"] {
+            width: 390px !important; # Set the width to your desired value
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 # Enhanced Custom CSS with beautiful styling
 st.markdown("""
 <style>
@@ -71,7 +107,10 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
     /* Global Styles */
+
     .main {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
         font-family: 'Inter', sans-serif;
         position : relative;
         padding-bottom: 180px;
@@ -91,7 +130,7 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 0.5rem;
         border-radius: 20px 20px 20px 20px;
-        margin-bottom: 1rem;
+        margin: 0 0 1rem 0;;
         box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
         text-align: center;
         position: relative;
@@ -112,8 +151,7 @@ st.markdown("""
 
     .chat-header h1 {
         color: white;
-        margin: 0;
-        font-weight: 600;
+        font-weight: 800;
         font-size: 2rem;
         text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         position: relative;
@@ -122,7 +160,7 @@ st.markdown("""
 
     .chat-header p {
         color: rgba(255,255,255,0.95);
-        margin: 0rem 0 0 0;
+        margin: 0.5rem 0 0 0;
         font-size: 1rem;
         font-weight: 400;
         position: relative;
@@ -131,7 +169,7 @@ st.markdown("""
 
     /* Enhanced Sidebar Styles */
     .sidebar-header {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        background:linear-gradient(135deg, #f08080, #667eea);
         padding: 1rem;
         border-radius: 15px;
         margin-bottom: 1rem;
@@ -571,7 +609,7 @@ st.markdown("""
         }
 
         .chat-header h1 {
-            font-size: 1.8rem;
+            font-size: 2.0rem;
         }
 
         .input-container-content {
@@ -730,6 +768,7 @@ def render_sidebar():
             if st.button("Logout", type="secondary"):
                 st.session_state.logged_in = False
                 st.session_state.user_id = ""
+                st.session_state.selected_thread = "New_Conversation"
                 st.rerun()
 
         # User Status Display
@@ -745,37 +784,11 @@ def render_sidebar():
                 st.session_state.show_dashboard = True
                 st.rerun()
 
-            # Enhanced Conversation Statistics
-            # col1, col2 = st.columns(2)
-            # with col1:
-            #     st.markdown(f"""
-            #     <div class="metric-card">
-            #         <div class="metric-value">{st.session_state.conversation_count}</div>
-            #         <div class="metric-label">Conversations</div>
-            #     </div>
-            #     """, unsafe_allow_html=True)
-            #
-            # with col2:
-            #     st.markdown(f"""
-            #     <div class="metric-card">
-            #         <div class="metric-value">{len(st.session_state.chat_history)}</div>
-            #         <div class="metric-label">Messages</div>
-            #     </div>
-            #     """, unsafe_allow_html=True)
-            #
-            # # Plots Statistics
-            # st.markdown(f"""
-            # <div class="metric-card">
-            #     <div class="metric-value">{len(st.session_state.all_plots)}</div>
-            #     <div class="metric-label">Generated Charts</div>
-            # </div>
-            # """, unsafe_allow_html=True)
-
             # Conversation History
             st.markdown("### 💬 Conversation History")
 
             # Search conversations
-            search_term = st.text_input("🔍 Search conversations", placeholder="Search by keywords...")
+            search_term = st.text_input("🔍",key="search_input", placeholder="Search conversations by keywords...")
 
             chat_history = st.session_state.user_chat_history
             filtered_conversations = {}
@@ -898,14 +911,14 @@ def render_typing_indicator():
 def render_welcome_message():
     """Render enhanced welcome message for new users"""
     if st.session_state.show_welcome and not st.session_state.chat_history:
-
         st.markdown("""
             <style>
                 .welcome-message {
-                    padding: 2rem;
+                    padding: 0rem;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     border-radius: 20px;
-                    margin-bottom: 2rem;
+                    margin-top:0px;
+                    margin-bottom: 1rem;
                     color: white;
                     text-align: center;
                     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -1064,7 +1077,7 @@ def render_welcome_message():
         cols = st.columns(2)
 
         with cols[0]:
-            with st.popover("📊 Insight Generation Agent", help="Click to learn more",use_container_width=True):
+            with st.popover("📊 Insight Generation Agent", help="Click to learn more", use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
                 The <strong>Insight Generation Agent</strong> aggregates and analyzes logistics and operational data, 
@@ -1076,7 +1089,8 @@ def render_welcome_message():
                 """, unsafe_allow_html=True)
 
         with cols[1]:
-            with st.popover("💰 Order Frequency Optimization Agent", help="Click to learn more",use_container_width=True):
+            with st.popover("💰 Order Frequency Optimization Agent", help="Click to learn more",
+                            use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
                     The <strong>Order Frequency Optimization Agent</strong> is designed to enhance
@@ -1088,7 +1102,8 @@ def render_welcome_message():
 
         cols = st.columns(2)
         with cols[0]:
-            with st.popover("📈 Pallet Utilization Optimization Agent", help="Click to learn more" ,use_container_width=True):
+            with st.popover("📈 Pallet Utilization Optimization Agent", help="Click to learn more",
+                            use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
                     The <strong>Pallet Utilization Optimization Agent</strong> is a cost-efficiency tool designed to
@@ -1099,7 +1114,7 @@ def render_welcome_message():
                 """, unsafe_allow_html=True)
 
         with cols[1]:
-            with st.popover("🎯 Drop Point Centralization Agent", help="Click to learn more",use_container_width=True):
+            with st.popover("🎯 Drop Point Centralization Agent", help="Click to learn more", use_container_width=True):
                 st.markdown("""
                 <div class="popover-content">
                     The <strong>Drop Point Centralization Agent</strong> is a strategic 
@@ -1340,14 +1355,14 @@ def render_dashboard_modal():
                         # if hasattr(chart, 'show'):  # Plotly chart
                         if hasattr(chart, 'to_plotly_json'):
                             chart_key = f"chart_{uuid.uuid4().hex[:8]}"
-                            st.plotly_chart(chart, use_container_width=True, key = chart_key)
+                            st.plotly_chart(chart, use_container_width=True, key=chart_key)
                         elif hasattr(chart, 'figure'):  # Matplotlib chart
                             st.pyplot(chart.figure, use_container_width=True)
                         else:
                             # Try to display as plotly first, then matplotlib
                             try:
                                 chart_key = f"chart_{uuid.uuid4().hex[:8]}"
-                                st.plotly_chart(chart, use_container_width=True, key = chart_key)
+                                st.plotly_chart(chart, use_container_width=True, key=chart_key)
                             except:
                                 st.pyplot(chart, use_container_width=True)
 
@@ -1393,6 +1408,7 @@ def render_dashboard_modal():
                 <p>Start asking questions to generate beautiful visualizations!</p>
             </div>
             """, unsafe_allow_html=True)
+
 
 def render_chat_interface():
     """Render the enhanced main chat interface"""
@@ -1531,7 +1547,6 @@ def render_chat_interface():
                                 </div>
                                 """, unsafe_allow_html=True)
 
-
             # Display charts for bot messages
             if img_list:
                 st.markdown("**📊 Analysis Charts:**")
@@ -1551,7 +1566,6 @@ def render_chat_interface():
         st.markdown("🔄 **Processing your request...** This may take a moment.")
 
     st.markdown('</div>', unsafe_allow_html=True)
-
 
 
 def render_follow_up_questions():
@@ -1604,7 +1618,7 @@ def render_input_area(data: Dict, azure_client, llm):
             user_input = st.text_area(
                 "💬 Ask me anything about your logistics data...",
                 value=st.session_state.chat_input_text,
-                height=80,
+                height=95,
                 placeholder="Example: What are our top shipping routes by volume?",
                 label_visibility="collapsed"
             )
@@ -1622,20 +1636,20 @@ def render_input_area(data: Dict, azure_client, llm):
             )
 
         # Enhanced quick action buttons
-    #     st.markdown("**⚡ Quick Actions:**")
-    #     quick_cols = st.columns(4)
-    #     quick_actions = [
-    #         "📊 Show dashboard",
-    #         "💰 Cost analysis",
-    #         "📈 Performance trends",
-    #         "🎯 Optimization tips"
-    #     ]
-    #
-    #     for i, action in enumerate(quick_actions):
-    #         with quick_cols[i]:
-    #             if st.form_submit_button(action, use_container_width=True):
-    #                 user_input = action.split(" ", 1)[1]  # Remove emoji
-    #
+        #     st.markdown("**⚡ Quick Actions:**")
+        #     quick_cols = st.columns(4)
+        #     quick_actions = [
+        #         "📊 Show dashboard",
+        #         "💰 Cost analysis",
+        #         "📈 Performance trends",
+        #         "🎯 Optimization tips"
+        #     ]
+        #
+        #     for i, action in enumerate(quick_actions):
+        #         with quick_cols[i]:
+        #             if st.form_submit_button(action, use_container_width=True):
+        #                 user_input = action.split(" ", 1)[1]  # Remove emoji
+        #
         # Process input
         if send_button and user_input.strip():
             st.session_state.is_processing = True
@@ -1670,7 +1684,7 @@ def process_user_input(question: str, data: Dict, azure_client, llm):
             "role": "user",
             "content": question,
             "img_list": st.session_state.image.copy(),  # Store current plots with user message
-            "text_streamed":False,
+            "text_streamed": False,
             "timestamp": datetime.now().strftime("%H:%M:%S")
         })
 
@@ -1683,7 +1697,7 @@ def process_user_input(question: str, data: Dict, azure_client, llm):
                 "role": "bot",
                 "content": bot_response,
                 "img_list": [],
-                "text_streamed":False,
+                "text_streamed": False,
                 "timestamp": datetime.now().strftime("%H:%M:%S")
             })
 
@@ -1777,6 +1791,7 @@ def main_app():
         unsafe_allow_html=True
     )
 
+
 def main():
     """Main application entry point"""
     # Check authentication status
@@ -1784,6 +1799,7 @@ def main():
         login_page()
     else:
         main_app()
+
 
 if __name__ == "__main__":
     main()
